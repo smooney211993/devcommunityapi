@@ -15,12 +15,15 @@ router.post(
     ).isLength({ min: 6 }),
   ],
   (req, res) => {
+    const { name, email, password } = req.body;
     const errors = validationResult(req);
     console.log(req.body);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     res.json('User route');
+    try {
+    } catch (error) {}
   }
 );
 
