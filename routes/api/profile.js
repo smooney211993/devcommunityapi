@@ -1,9 +1,9 @@
 onst express = require('express');
 const router = express.Router();
 
-// route get api/post
+// route get api/profile
 router.get('/', (req, res) => {
-  res.json('Post route');
+  res.json('Profile route');
 });
 
 module.exports = {
