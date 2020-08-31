@@ -6,6 +6,4 @@ router.get('/', (req, res) => {
   res.json('User route');
 });
 
-module.exports = {
-  router,
-};
+module.exports = router;
