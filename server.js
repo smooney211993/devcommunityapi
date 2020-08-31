@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 3000;
 app.get('/', (req, res) => {
   res.json('Server up and running');
 });
-
+// bodyparse middleware
+app.use(express.json({ extended: false }));
 // define routes
 app.use('/api/users', users);
 app.use('/api/profile', profile);
