@@ -3,6 +3,7 @@ const router = express.Router();
 const authToken = require('../../middleware/auth');
 const Profile = require('../../modules/Profile');
 const User = require('../../modules/User');
+const { body, validationResult } = require('express-validator');
 
 // route get api/profile/me
 // get current users profile private via jsonwebtoken
@@ -15,6 +16,7 @@ router.get('/me', authToken, async (req, res) => {
     if (!profile) {
       return res.status(400).json({ msg: 'There is no profile for this user' });
     }
+    res.json(profile);
   } catch (error) {
     console.log(error.message);
     res.status(500).json('Server error');
@@ -22,4 +24,3 @@ router.get('/me', authToken, async (req, res) => {
 });
 
 module.exports = router;
-S;
