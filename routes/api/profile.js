@@ -48,6 +48,7 @@ router.post(
       instagram,
       linkedin,
     } = req.body;
+    //take the field inputs out of the body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -110,7 +111,7 @@ router.get('/', async (req, res) => {
 //api/profile/user/user_id
 router.get('/user/:user_id', async (req, res) => {
   try {
-    const profile = await await Profile.findOne({
+    const profile = await Profile.findOne({
       user: req.params.user_id,
     }).populate('user', ['name', 'avatar']);
     if (!profile) {
@@ -122,6 +123,21 @@ router.get('/user/:user_id', async (req, res) => {
     if (error.kind === 'ObjectId') {
       return res.status(400).json({ msg: 'there is no profile for this user' });
     }
+    res.status(500).json('Server Error');
+  }
+});
+
+// api/profile
+//delete profile
+//private will need webtoken
+router.delete('/', authToken, async (req, res) => {
+  try {
+    // remove profile
+    await Profile.findOneAndRemove({ user: req.user.id });
+    await User.findOneAndRemove({ _id: req.user.id });
+    res.json({ msg: 'Successfully removed' });
+  } catch (error) {
+    console.log(error.message);
     res.status(500).json('Server Error');
   }
 });
