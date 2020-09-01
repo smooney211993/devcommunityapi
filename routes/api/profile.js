@@ -96,6 +96,7 @@ router.post(
 );
 
 // get all profiles
+//api/profile
 router.get('/', async (req, res) => {
   try {
     const profiles = await Profile.find().populate('user', ['name', 'avatar']);
@@ -106,4 +107,22 @@ router.get('/', async (req, res) => {
   }
 });
 // get user profile id
+//api/profile/user/user_id
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const profile = await await Profile.findOne({
+      user: req.params.user_id,
+    }).populate('user', ['name', 'avatar']);
+    if (!profile) {
+      return res.status(400).json({ msg: 'there is no profile for this user' });
+    }
+    res.send(profile);
+  } catch (error) {
+    console.log(error.message);
+    if (error.kind === 'ObjectId') {
+      return res.status(400).json({ msg: 'there is no profile for this user' });
+    }
+    res.status(500).json('Server Error');
+  }
+});
 module.exports = router;
