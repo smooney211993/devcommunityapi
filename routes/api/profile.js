@@ -141,4 +141,23 @@ router.delete('/', authToken, async (req, res) => {
     res.status(500).json('Server Error');
   }
 });
+
+// route put api/profile/experience
+// add profile experience
+//web token needed
+router.put(
+  '/experience',
+  authToken,
+  [
+    body(
+      'title,',
+      'Title is required',
+      body('company', 'Company is required'),
+      body('from', 'From date is required')
+    )
+      .not()
+      .isEmpty(),
+  ],
+  async (req, res) => {}
+);
 module.exports = router;
