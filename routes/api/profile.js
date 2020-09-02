@@ -149,21 +149,24 @@ router.put(
   '/experience',
   authToken,
   [
-    body(
-      'title,',
-      'Title is required',
-      body('company', 'Company is required'),
-      body('from', 'From date is required')
-    )
-      .not()
-      .isEmpty(),
+    body('title', 'Title is required').not().isEmpty(),
+    body('company', 'Company is required').not().isEmpty(),
+    body('from', 'From date is required').not().isEmpty(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { title, company, from, to, current, description } = req.body;
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
     const newExperience = {
       title,
       company,
@@ -177,6 +180,7 @@ router.put(
     try {
       const profile = await Profile.findOne({ user: req.user.id });
       profile.experience.unshift(newExperience);
+      console.log(profile.experience);
       await profile.save();
       res.json(profile);
     } catch (error) {
