@@ -66,7 +66,7 @@ router.post(
     if (skills) {
       profileFields.skills = skills.split(',').map((skill) => skill.trim());
     }
-    // build social array
+    // build social object
     profileFields.social = {};
     if (youtube) profileFields.youtube = youtube;
     if (facebook) profileFields.facebook = facebook;
@@ -243,6 +243,15 @@ router.put(
       current,
       description,
     };
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      profile.education.unshift(newEducation);
+      await profile.save();
+      res.json(profile);
+    } catch (error) {
+      console.log(error.message);
+      res.status(500), json('Server Error');
+    }
   }
 );
 module.exports = router;
