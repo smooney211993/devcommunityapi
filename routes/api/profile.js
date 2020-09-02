@@ -210,7 +210,9 @@ router.delete('/experience/:exp_id', authToken, async (req, res) => {
     res.status(500).json('Server Error');
   }
 });
-
+// api/profile/education
+//submit user profile education to the database
+//will need web token
 router.put(
   '/education',
   [
@@ -254,4 +256,7 @@ router.put(
     }
   }
 );
+
+router.delete('/experience/exp_id', authToken, async (req, res) => {});
+
 module.exports = router;
