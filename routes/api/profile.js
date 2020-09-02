@@ -189,4 +189,16 @@ router.put(
     }
   }
 );
+
+// delete request
+// api/profile/experience
+// delete experience from profile
+
+router.delete('/experience/:exp_id', async (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json('Server Error');
+  }
+});
 module.exports = router;
