@@ -76,6 +76,7 @@ router.post(
 
     try {
       let profile = await Profile.findOne({ user: req.user.id });
+      // if profile exists update exisiting profile
       if (profile) {
         profile = await Profile.findOneAndUpdate(
           { user: req.user.id },
@@ -84,7 +85,7 @@ router.post(
         );
         return res.json(profile);
       }
-      // Create new profile
+      // if profile doesnt exist, Create new profile
       profile = new Profile(profileFields);
       await profile.save();
       res.json(profile);
@@ -202,7 +203,7 @@ router.delete('/experience/:exp_id', authToken, async (req, res) => {
     const indexDelete = profile.experience
       .map((item) => item._id)
       .indexOf(req.params.exp_id);
-    profile.experience.splice(indexDelete, 1);
+    profile.education.splice(indexDelete, 1);
     await profile.save();
     res.json(profile);
   } catch (error) {
@@ -256,7 +257,20 @@ router.put(
     }
   }
 );
-
-router.delete('/experience/exp_id', authToken, async (req, res) => {});
+// api/profile/experience/:edu_id
+router.delete('/education/:edu_id', authToken, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    const indexDelete = profile.education
+      .map((item) => item._id)
+      .indexOf(req.params.id);
+    profile.education.splice(indexDelete, 1);
+    await profile.save();
+    res.json(profile);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json('Server Error');
+  }
+});
 
 module.exports = router;
