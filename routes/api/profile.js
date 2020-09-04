@@ -287,9 +287,6 @@ router.get('/github/:username', async (req, res) => {
       'githubClientId'
     )}&client_secret=${config.get('githubSecret')}`;
     const response = await fetch(url, {
-      headers: {
-        'user-agent': 'node.js',
-      },
       method: 'GET',
     });
     if (response.ok) {
