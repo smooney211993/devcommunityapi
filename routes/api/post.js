@@ -41,8 +41,27 @@ router.post(
 // webtoken need
 router.get('/', authToken, async (req, res) => {
   try {
+    const post = await Post.find().sort({ date: -1 });
+    res.json(post);
   } catch (error) {
     console.log(error.message);
+    res.status(500).json('Server Error');
+  }
+});
+// get post by id
+// webtoken needed
+router.get('/:id', authToken, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ msg: 'Post not found' });
+    }
+    res.json(post);
+  } catch (error) {
+    console.log(error.message);
+    if (error.kind === 'ObjectId') {
+      return res.status(404).json('Post not found');
+    }
     res.status(500).json('Server Error');
   }
 });
