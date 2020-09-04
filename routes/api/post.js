@@ -65,4 +65,43 @@ router.get('/:id', authToken, async (req, res) => {
     res.status(500).json('Server Error');
   }
 });
+
+// delete post
+// router api/post/:id
+router.delete('/:id', authToken, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    // check the user owns the post
+    if (post.user.toString() !== req.user.id) {
+      return res.status(404).json({ msg: 'User not authorized' });
+    }
+    await post.remove();
+    res.json({ msg: 'Post Removed' });
+  } catch (error) {
+    if (error.kind === 'ObjectId') {
+      return res.status(404).json('Post not found');
+    }
+    res.status(500).json('Server Error');
+  }
+});
+
+// put api/post/like/:id
+// like a post
+// webtoken needed
+router.put('/like/:id', authToken, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    // check if post has already been liked by this user
+    if (post.likes.find((like) => like.user.toString() === req.user.id)) {
+      return res.status(400).json('Post already liked');
+    }
+
+    post.likes.unshift({ user: req.user.id });
+    await post.save();
+    res.json(post);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json('Server Error');
+  }
+});
 module.exports = router;

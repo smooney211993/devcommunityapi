@@ -138,6 +138,7 @@ router.delete('/', authToken, async (req, res) => {
   try {
     // remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
+    // remove user
     await User.findOneAndRemove({ _id: req.user.id });
     res.json({ msg: 'Successfully removed' });
   } catch (error) {
@@ -270,6 +271,7 @@ router.put(
 router.delete('/education/:edu_id', authToken, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
+    // find the educationt that is to be deleted
     const toBeDeleted = profile.education.find((item) => {
       return item.id === req.params.edu_id;
     });
@@ -303,7 +305,6 @@ router.get('/github/:username', async (req, res) => {
     });
     if (response.ok) {
       const jsonResponse = await response.json();
-      console.log(jsonResponse);
       res.json(jsonResponse);
     } else {
       return res.status(404).json({ msg: 'Profile is not found' });
