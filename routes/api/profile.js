@@ -213,7 +213,7 @@ router.delete('/experience/:exp_id', authToken, async (req, res) => {
       (item) => item.id !== toBeDeleted.id
     );
     profile.experience = updated;
-    profile.save();
+    await profile.save();
     res.json(profile);
   } catch (error) {
     console.log(error);
@@ -280,7 +280,7 @@ router.delete('/education/:edu_id', authToken, async (req, res) => {
       (item) => item.id !== toBeDeleted.id
     );
     profile.education = updatedEducation;
-    profile.save();
+    await profile.save();
     res.json(profile);
   } catch (error) {
     console.log(error.message);

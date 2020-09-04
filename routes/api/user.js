@@ -23,7 +23,6 @@ router.post(
     const { name, email, password } = req.body;
     // deconstruct the values from the req.body
     const errors = validationResult(req);
-    console.log(req.body);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
