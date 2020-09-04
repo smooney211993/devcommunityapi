@@ -5,7 +5,8 @@ const Profile = require('../../modules/Profile');
 const User = require('../../modules/User');
 const { body, validationResult } = require('express-validator');
 const request = require('request');
-const config = require('../../config/default.json');
+const config = require('config');
+const fetch = require('node-fetch');
 
 // route get api/profile/me
 // get current users profile private via jsonwebtoken
@@ -280,6 +281,24 @@ router.delete('/education/:edu_id', authToken, async (req, res) => {
 // public
 router.get('/github/:username', async (req, res) => {
   try {
+    const url = `https://api.github.com/users/${
+      req.params.username
+    }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+      'githubClientId'
+    )}&client_secret=${config.get('githubSecret')}`;
+    const response = await fetch(url, {
+      headers: {
+        'user-agent': 'node.js',
+      },
+      method: 'GET',
+    });
+    if (response.ok) {
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+      res.json(jsonResponse);
+    } else {
+      return res.status(404).json({ msg: 'Profile is not found' });
+    }
   } catch (error) {
     console.log(error.message);
     res.status(500).json('Server Error');
