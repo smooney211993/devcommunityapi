@@ -98,10 +98,38 @@ router.put('/like/:id', authToken, async (req, res) => {
 
     post.likes.unshift({ user: req.user.id });
     await post.save();
-    res.json(post);
+    res.json(post.likes);
   } catch (error) {
     console.log(error.message);
     res.status(500).json('Server Error');
   }
 });
+
+// api/unlike/:id
+// unlike post
+// webtoken needed
+router.put('/unlike/:id', authToken, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    // check to see if the post has been liked
+    const likedByUser = post.likes.find(
+      (like) => like.user.toString() === req.user.id
+    );
+    console.log(likedByUser);
+    if (!likedByUser) {
+      return res.status(400).json('Can not unlike a post');
+    }
+    // removed the liked post
+    const updated = post.likes.filter(
+      (like) => like.user.toString() !== likedByUser.user.toString()
+    );
+    post.likes = updated;
+    await post.save();
+    res.json(post.likes);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json('Server error');
+  }
+});
+
 module.exports = router;
