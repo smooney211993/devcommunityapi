@@ -132,7 +132,7 @@ router.get('/user/:user_id', async (req, res) => {
 });
 
 // api/profile
-//delete profile
+//delete profile and user
 //private will need webtoken
 router.delete('/', authToken, async (req, res) => {
   try {
@@ -202,12 +202,18 @@ router.delete('/experience/:exp_id', authToken, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
-    // get the removed index
-    const indexDelete = profile.experience
-      .map((item) => item._id)
-      .indexOf(req.params.exp_id);
-    profile.education.splice(indexDelete, 1);
-    await profile.save();
+    // get the removed object
+    const toBeDeleted = profile.experience.find(
+      (item) => item.id === req.params.exp_id
+    );
+    if (!toBeDeleted) {
+      return res.status(404).json({ msg: 'experience not found' });
+    }
+    const updated = profile.experience.filter(
+      (item) => item.id !== toBeDeleted.id
+    );
+    profile.experience = updated;
+    profile.save();
     res.json(profile);
   } catch (error) {
     console.log(error);
@@ -260,15 +266,21 @@ router.put(
     }
   }
 );
-// api/profile/experience/:edu_id
+// api/profile/education/:edu_id
 router.delete('/education/:edu_id', authToken, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
-    const indexDelete = profile.education
-      .map((item) => item._id)
-      .indexOf(req.params.id);
-    profile.education.splice(indexDelete, 1);
-    await profile.save();
+    const toBeDeleted = profile.education.find((item) => {
+      return item.id === req.params.edu_id;
+    });
+    if (!toBeDeleted) {
+      return res.status(404).json({ msg: 'education not found' });
+    }
+    const updatedEducation = profile.education.filter(
+      (item) => item.id !== toBeDeleted.id
+    );
+    profile.education = updatedEducation;
+    profile.save();
     res.json(profile);
   } catch (error) {
     console.log(error.message);

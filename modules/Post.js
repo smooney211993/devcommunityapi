@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const PostSchema = new monoogse.Schema({
+const PostSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'user',
   },
   text: {
     type: String,
@@ -19,7 +19,7 @@ const PostSchema = new monoogse.Schema({
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'user',
       },
     },
   ],
