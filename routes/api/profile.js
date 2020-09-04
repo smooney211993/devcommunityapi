@@ -4,6 +4,8 @@ const authToken = require('../../middleware/auth');
 const Profile = require('../../modules/Profile');
 const User = require('../../modules/User');
 const { body, validationResult } = require('express-validator');
+const request = require('request');
+const config = require('../../config/default.json');
 
 // route get api/profile/me
 // get current users profile private via jsonwebtoken
@@ -267,6 +269,17 @@ router.delete('/education/:edu_id', authToken, async (req, res) => {
     profile.education.splice(indexDelete, 1);
     await profile.save();
     res.json(profile);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json('Server Error');
+  }
+});
+
+// get request api/profile/github/:username
+//get user repo from github
+// public
+router.get('/github/:username', async (req, res) => {
+  try {
   } catch (error) {
     console.log(error.message);
     res.status(500).json('Server Error');
