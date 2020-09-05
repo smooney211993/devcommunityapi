@@ -138,7 +138,29 @@ router.put('/unlike/:id', authToken, async (req, res) => {
 router.post(
   '/comments/:id',
   [authToken, body('text', 'Text is required').not().isEmpty()],
-  async (req, res) => {}
+  async (req, res) => {
+    const { text } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const user = await User.findById(req.user.id).isSelected('-password');
+      const post = await Post.findById(req.params.id);
+      const newComment = {
+        text,
+        user: req.user.id,
+        name: user.name,
+        avatar: user.avatar,
+      };
+      post.comments = newComment;
+      await post.save();
+      res.json(post.comments);
+    } catch (error) {
+      console.log(errors);
+      res.status(500).json('Server error');
+    }
+  }
 );
 
 module.exports = router;
