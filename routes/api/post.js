@@ -117,7 +117,7 @@ router.put('/unlike/:id', authToken, async (req, res) => {
     );
     console.log(likedByUser);
     if (!likedByUser) {
-      return res.status(400).json('Can not unlike a post');
+      return res.status(400).json('Post has not been liked');
     }
     // removed the liked post
     const updated = post.likes.filter(
@@ -131,5 +131,14 @@ router.put('/unlike/:id', authToken, async (req, res) => {
     res.status(500).json('Server error');
   }
 });
+
+// route api/posts/comment/
+//comment on post
+//private
+router.post(
+  '/comments/:id',
+  [authToken, body('text', 'Text is required').not().isEmpty()],
+  async (req, res) => {}
+);
 
 module.exports = router;
