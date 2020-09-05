@@ -15,7 +15,7 @@ router.post(
   async (req, res) => {
     const { text } = req.body;
     const errors = validationResult(req);
-    if (!errors) {
+    if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     try {
@@ -93,7 +93,7 @@ router.put('/like/:id', authToken, async (req, res) => {
     const post = await Post.findById(req.params.id);
     // check if post has already been liked by this user
     if (post.likes.find((like) => like.user.toString() === req.user.id)) {
-      return res.status(400).json('Post already liked');
+      return res.status(400).json({ msg: 'Post already been liked' });
     }
 
     post.likes.unshift({ user: req.user.id });
@@ -117,7 +117,7 @@ router.put('/unlike/:id', authToken, async (req, res) => {
     );
     console.log(likedByUser);
     if (!likedByUser) {
-      return res.status(400).json('Post has not been liked');
+      return res.status(400).json({ msg: 'Post has not been liked' });
     }
     // removed the liked post
     const updated = post.likes.filter(
@@ -137,7 +137,8 @@ router.put('/unlike/:id', authToken, async (req, res) => {
 //private
 router.post(
   '/comments/:id',
-  [authToken, body('text', 'Text is required').not().isEmpty()],
+  authToken,
+  [body('text', 'Text is required').not().isEmpty()],
   async (req, res) => {
     const { text } = req.body;
     const errors = validationResult(req);
@@ -145,7 +146,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const user = await User.findById(req.user.id).isSelected('-password');
+      const user = await User.findById(req.user.id).select('-password');
       const post = await Post.findById(req.params.id);
       const newComment = {
         text,
@@ -153,7 +154,8 @@ router.post(
         name: user.name,
         avatar: user.avatar,
       };
-      post.comments = newComment;
+      console.log(newComment);
+      post.comments.unshift(newComment);
       await post.save();
       res.json(post.comments);
     } catch (error) {
@@ -162,5 +164,34 @@ router.post(
     }
   }
 );
+
+// delete comment
+//api/post/comment/:id/:comment_id
+router.delete('/comments/:id/:comment_id', authToken, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    // find the post
+    const comment = post.comments.find(
+      (comment) => comment.id === req.params.comment_id
+    );
+    // check to see if the comments exist
+    if (!comment) {
+      return res.status(404).json({ msg: 'Comment does not exist' });
+    }
+    // check to see if the user made the comment
+    if (!comment.user.toString() === req.user.id) {
+      return res.status(400).json({ msg: 'Can not delete comment' });
+    }
+    const updated = post.comments.filter(
+      (comment) => comment.id !== req.params.comment_id
+    );
+    post.comments = updated;
+    await post.save();
+    res.json(post.comments);
+  } catch (error) {
+    console.log(errors);
+    res.status(500).json('Server error');
+  }
+});
 
 module.exports = router;
