@@ -3,6 +3,7 @@ const router = express.Router();
 const authToken = require('../../middleware/auth');
 const Profile = require('../../modules/Profile');
 const User = require('../../modules/User');
+const Post = require('../../modules/Post');
 const { body, validationResult } = require('express-validator');
 const request = require('request');
 const config = require('config');
@@ -136,6 +137,8 @@ router.get('/user/:user_id', async (req, res) => {
 //private will need webtoken
 router.delete('/', authToken, async (req, res) => {
   try {
+    // Remove user posts
+    await Post.deleteMany({ user: req.user.id });
     // remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
     // remove user
