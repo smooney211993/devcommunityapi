@@ -15,7 +15,6 @@ import Alert from './Components/layout/Alert';
 import PrivateRoute from './Components/routing/PrivateRoute';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
-import setAuthToken from './utils/setAuthToken';
 import { loadUser } from './actions/auth';
 import Profile from './Components/profile/Profile';
 
