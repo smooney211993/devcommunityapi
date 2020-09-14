@@ -12,9 +12,9 @@ const path = require('path');
 // connect to mongo database
 connectDB();
 const PORT = process.env.PORT || 3001;
-/*app.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.json('Server up and running');
-});*/
+});
 // bodyparse middleware
 app.use(express.json({ extended: false }));
 app.use(cors());
