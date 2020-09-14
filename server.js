@@ -12,11 +12,9 @@ const path = require('path');
 // connect to mongo database
 connectDB();
 const PORT = process.env.PORT || 3001;
-app.get('/', (req, res) => {
-  res.json('Server up and running');
-});
+
 // bodyparse middleware
-app.use(express.json({ extended: false }));
+app.use(express.json());
 app.use(cors());
 // define routes
 app.use('/api/users', users);
@@ -25,9 +23,10 @@ app.use('/api/auth', auth);
 app.use('/api/post', post);
 
 // serve static assets in production
-if (process.env.node_ENV === 'production') {
-  // set the static folder
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
   app.use(express.static('client/build'));
+
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
