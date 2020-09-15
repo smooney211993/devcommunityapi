@@ -3,6 +3,7 @@ import Navbar from './Components/layout/Navbar';
 import Landing from './Components/layout/Landing';
 import Register from './Components/auth/Register';
 import Dashboard from './Components/dashboard/Dashboard';
+import NotFound from './Components/layout/NotFound';
 import Login from './Components/auth/Login';
 import CreateProfile from './Components/profile-forms/CreateProfile';
 import EditProfile from './Components/profile-forms/EditProfile';
