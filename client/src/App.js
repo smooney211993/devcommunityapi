@@ -5,6 +5,7 @@ import Routes from './Components/routing/Routes';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import { loadUser } from './actions/auth';
+import PostContextProvider from './Components/Postcontext/PostContextProvider';
 
 // redux
 import { Provider } from 'react-redux';
