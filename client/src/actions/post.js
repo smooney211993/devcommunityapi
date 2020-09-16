@@ -14,7 +14,7 @@ import {
 export const getPostById = (postId) => async (dispatch) => {
   try {
     const { data } = await axios.get(
-      `http://localhost:3001/api/post/${postId}`
+      `https://devcommunity2000.herokuapp.com/api/post/${postId}`
     );
     console.log(data);
     dispatch({
@@ -31,7 +31,9 @@ export const getPostById = (postId) => async (dispatch) => {
 // get post from database
 export const getPosts = () => async (dispatch) => {
   try {
-    const { data } = await axios.get('http://localhost:3001/api/post');
+    const { data } = await axios.get(
+      'https://devcommunity2000.herokuapp.com/api/post'
+    );
     dispatch({
       type: GET_POSTS,
       payload: data,
@@ -47,7 +49,7 @@ export const getPosts = () => async (dispatch) => {
 export const addLike = (postId) => async (dispatch) => {
   try {
     const { data } = await axios.put(
-      `http://localhost:3001/api/post/like/${postId}`
+      `https://devcommunity2000.herokuapp.com/api/post/like/${postId}`
     );
     dispatch({
       type: UPDATE_LIKES,
@@ -64,7 +66,7 @@ export const addLike = (postId) => async (dispatch) => {
 export const unLike = (postId) => async (dispatch) => {
   try {
     const { data } = await axios.put(
-      `http://localhost:3001/api/post/unlike/${postId}`
+      `https://devcommunity2000.herokuapp.com/api/post/unlike/${postId}`
     );
     dispatch({
       type: UPDATE_LIKES,
@@ -82,7 +84,7 @@ export const unLike = (postId) => async (dispatch) => {
 export const deletePost = (postId) => async (dispatch) => {
   try {
     const { data } = await axios.delete(
-      `http://localhost:3001/api/post/${postId}`
+      `https://devcommunity2000.herokuapp.com/api/post/${postId}`
     );
     dispatch({
       type: DELETE_POST,
@@ -105,7 +107,7 @@ export const addPost = (formState) => async (dispatch) => {
   };
   try {
     const { data } = await axios.post(
-      `http://localhost:3001/api/post`,
+      `https://devcommunity2000.herokuapp.com/api/post`,
       formState,
       config
     );
@@ -130,7 +132,7 @@ export const addComment = (postId, formState) => async (dispatch) => {
   };
   try {
     const { data } = await axios.post(
-      `http://localhost:3001/api/post/comments/${postId}`,
+      `https://devcommunity2000.herokuapp.com/api/post/comments/${postId}`,
       formState,
       config
     );
@@ -151,7 +153,7 @@ export const addComment = (postId, formState) => async (dispatch) => {
 export const deleteComment = (postId, commentId) => async (dispatch) => {
   try {
     await axios.delete(
-      `http://localhost:3001/api/post/comments/${postId}/${commentId}`
+      `https://devcommunity2000.herokuapp.com/api/post/comments/${postId}/${commentId}`
     );
     dispatch({
       type: REMOVE_COMMENT,

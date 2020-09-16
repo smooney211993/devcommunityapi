@@ -13,7 +13,9 @@ import axios from 'axios';
 // load user
 export const loadUser = () => async (dispatch) => {
   try {
-    const { data } = await axios.get('http://localhost:3001/api/auth');
+    const { data } = await axios.get(
+      'https://devcommunity2000.herokuapp.com/api/auth'
+    );
     dispatch({
       type: USER_LOADED,
       payload: data,
@@ -39,7 +41,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
   });
   try {
     const { data } = await axios.post(
-      'http://localhost:3001/api/users',
+      'https://devcommunity2000.herokuapp.com/api/users',
       body,
       config
     );
@@ -73,7 +75,7 @@ export const login = (email, password) => async (dispatch) => {
   });
   try {
     const { data } = await axios.post(
-      'http://localhost:3001/api/auth',
+      'https://devcommunity2000.herokuapp.com/api/auth',
       body,
       config
     );

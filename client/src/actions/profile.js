@@ -13,7 +13,9 @@ import {
 export const getProfiles = () => async (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
   try {
-    const { data } = await axios.get(`http://localhost:3001/api/profile`);
+    const { data } = await axios.get(
+      `https://devcommunity2000.herokuapp.com/api/profile`
+    );
     dispatch({
       type: GET_PROFILES,
       payload: data,
@@ -29,7 +31,7 @@ export const getProfiles = () => async (dispatch) => {
 export const getProfileById = (userId) => async (dispatch) => {
   try {
     const { data } = await axios.get(
-      `http://localhost:3001/api/profile/user/${userId}`
+      `https://devcommunity2000.herokuapp.com/api/profile/user/${userId}`
     );
     dispatch({
       type: GET_PROFILE,
@@ -46,7 +48,7 @@ export const getProfileById = (userId) => async (dispatch) => {
 export const getGitHubRepos = (username) => async (dispatch) => {
   try {
     const { data } = await axios.get(
-      `http://localhost:3001/api/profile/github/${username}`
+      `https://devcommunity2000.herokuapp.com/api/profile/github/${username}`
     );
     dispatch({ type: GET_GITHUBREPO, payload: data });
   } catch (err) {
@@ -59,7 +61,9 @@ export const getGitHubRepos = (username) => async (dispatch) => {
 // get current user profile
 export const getCurrentProfile = () => async (dispatch) => {
   try {
-    const { data } = await axios.get(`http://localhost:3001/api/profile/me`);
+    const { data } = await axios.get(
+      `https://devcommunity2000.herokuapp.com/api/profile/me`
+    );
 
     dispatch({
       type: GET_PROFILE,
@@ -83,7 +87,7 @@ export const createProfile = (formState, history, edit = false) => async (
       headers: { 'Content-type': 'application/json' },
     };
     const { data } = await axios.post(
-      `http://localhost:3001/api/profile/`,
+      `https://devcommunity2000.herokuapp.com/api/profile/`,
       formState,
       config
     );
@@ -117,7 +121,7 @@ export const addExperience = (formState, history) => async (dispatch) => {
       headers: { 'Content-type': 'application/json' },
     };
     const { data } = await axios.put(
-      `http://localhost:3001/api/profile/experience`,
+      `https://devcommunity2000.herokuapp.com/api/profile/experience`,
       formState,
       config
     );
@@ -150,7 +154,7 @@ export const addEducation = (formState, history) => async (dispatch) => {
       headers: { 'Content-type': 'application/json' },
     };
     const { data } = await axios.put(
-      `http://localhost:3001/api/profile/education`,
+      `https://devcommunity2000.herokuapp.com/api/profile/education`,
       formState,
       config
     );
@@ -181,7 +185,7 @@ export const addEducation = (formState, history) => async (dispatch) => {
 export const deleteExperience = (experienceId) => async (dispatch) => {
   try {
     const { data } = await axios.delete(
-      `http://localhost:3001/api/profile/experience/${experienceId}`
+      `https://devcommunity2000.herokuapp.com/api/profile/experience/${experienceId}`
     );
     dispatch({
       type: UPDATE_PROFILE,
@@ -202,7 +206,7 @@ export const deleteExperience = (experienceId) => async (dispatch) => {
 export const deleteEducation = (educationId) => async (dispatch) => {
   try {
     const { data } = await axios.delete(
-      `http://localhost:3001/api/profile/education/${educationId}`
+      `https://devcommunity2000.herokuapp.com/api/profile/education/${educationId}`
     );
     dispatch({
       type: UPDATE_PROFILE,
@@ -228,7 +232,7 @@ export const deleteAccount = () => async (dispatch) => {
     )
   ) {
     try {
-      await axios.delete(`http://localhost:3001/api/profile`);
+      await axios.delete(`https://devcommunity2000.herokuapp.com/api/profile`);
       dispatch({ type: CLEAR_PROFILE });
       dispatch({ type: ACCOUNT_DELETED });
       dispatch(setAlert('Your account has been permenatly deleted'));
